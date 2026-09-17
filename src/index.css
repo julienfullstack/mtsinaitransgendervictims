@@ -1,0 +1,143 @@
+/*
+ * Parody of a large academic hospital website: deep navy, magenta and cyan
+ * accents, plain institutional sans-serif. No hospital logos or marks.
+ */
+:root {
+  --navy: #221f72;
+  --magenta: #d80b8c;
+  --cyan: #00aeef;
+  --bg: #ffffff;
+  --surface: #f4f5fa;
+  --text: #1b1b2f;
+  --muted: #5b5d78;
+  --border: #dcdef0;
+  --mark: #ffe46b;
+  color-scheme: light;
+  font-family: 'Helvetica Neue', Arial, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0d24;
+    --surface: #1a1940;
+    --text: #ecebfa;
+    --muted: #a9a8c9;
+    --border: #2e2c63;
+    --mark: #8a6d00;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+a { color: inherit; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+}
+
+.parody-bar {
+  background: var(--magenta);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 6px 16px;
+}
+
+.site-header {
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 14px clamp(16px, 4vw, 48px);
+  border-bottom: 4px solid transparent;
+  border-image: linear-gradient(90deg, var(--cyan), var(--magenta), var(--navy)) 1;
+}
+
+.wordmark { display: flex; flex-direction: column; text-decoration: none; line-height: 1.05; }
+.wordmark-mt { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
+.wordmark-sub { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--cyan); }
+
+.site-header nav { display: flex; flex-wrap: wrap; gap: 4px; }
+.site-header nav a {
+  text-decoration: none; padding: 8px 12px; border-radius: 4px; font-weight: 600; font-size: 0.95rem;
+}
+.site-header nav a:hover { background: rgba(255, 255, 255, 0.12); }
+.site-header nav a[aria-current='page'] { box-shadow: inset 0 -3px 0 var(--magenta); }
+
+main { padding: 24px clamp(16px, 4vw, 48px) 64px; max-width: 1280px; margin: 0 auto; }
+.page h1 { color: var(--magenta); font-size: clamp(1.6rem, 4vw, 2.4rem); margin: 8px 0 16px; }
+.page h2 { color: var(--navy); margin-top: 40px; }
+@media (prefers-color-scheme: dark) { .page h2 { color: var(--cyan); } }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 20px; }
+.search { flex: 1 1 260px; }
+.search input, .toolbar select {
+  width: 100%; padding: 10px 12px; font: inherit; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+}
+.toolbar select { width: auto; max-width: 100%; }
+.search input:focus, .toolbar select:focus { outline: 2px solid var(--cyan); outline-offset: 1px; }
+.count { color: var(--muted); font-size: 0.9rem; }
+.empty { color: var(--muted); }
+
+.list, .grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--navy);
+  border-radius: 4px; padding: 12px 14px; min-width: 0;
+}
+.card.record { border-left-color: var(--cyan); }
+.card.report { border-left-color: var(--magenta); }
+.card header, .card-head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.card-head {
+  width: 100%; background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; cursor: pointer;
+}
+.meta { color: var(--muted); font-size: 0.85rem; margin-top: 4px; overflow-wrap: anywhere; }
+.body {
+  white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; font-size: 0.92rem; margin: 10px 0 0;
+  max-height: 420px; overflow: auto;
+}
+mark { background: var(--mark); color: inherit; }
+
+.badge { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; color: #fff; background: var(--muted); }
+.badge-allegation { background: var(--magenta); }
+.badge-documentary_evidence { background: var(--navy); }
+.badge-hospital_response { background: #6b6b6b; }
+.badge-verified_fact { background: #00789f; }
+.dir { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+.dir-sent { color: var(--magenta); }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.tag { font-size: 0.75rem; border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; }
+.chip {
+  font: inherit; font-size: 0.85rem; padding: 6px 10px; margin-top: 8px; border-radius: 999px;
+  border: 1px solid var(--magenta); background: none; color: var(--magenta); cursor: pointer;
+}
+
+.response { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 0.85rem; margin: 10px 0 0; }
+.response dt { color: var(--muted); }
+.response dd { margin: 0; }
+.statement { margin: 12px 0 0; padding-left: 12px; border-left: 3px solid var(--muted); }
+
+.timeline { display: grid; gap: 12px; }
+.timeline-head, .timeline-row { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 12px; align-items: start; }
+.timeline-head { font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+@media (prefers-color-scheme: dark) { .timeline-head { color: var(--cyan); } }
+.timeline-row > div { display: grid; gap: 8px; min-width: 0; }
+.timeline-row time { font-weight: 700; padding-top: 12px; }
+@media (max-width: 760px) {
+  .timeline-head { display: none; }
+  .timeline-row { grid-template-columns: 1fr; }
+}
+
+.story p { max-width: 70ch; line-height: 1.6; }
+.chronology { width: 100%; border-collapse: collapse; font-size: 0.9rem; display: block; overflow-x: auto; }
+.chronology th, .chronology td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border); }
+.chronology th { color: var(--muted); }
