@@ -4,16 +4,33 @@ server {
   root /usr/share/nginx/html;
   index index.html;
 
+  # ROBOTS is "noindex, nofollow, noarchive" until launch, then "index, follow".
+  # CSP_CONNECT is the API origin the page may call.
   add_header X-Content-Type-Options "nosniff" always;
   add_header X-Frame-Options "DENY" always;
   add_header Referrer-Policy "no-referrer" always;
+  add_header X-Robots-Tag "${ROBOTS}" always;
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+  add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+  add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ${CSP_CONNECT}; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'" always;
+
+  location = /robots.txt {
+    default_type text/plain;
+    return 200 "User-agent: *\nDisallow: /\n";
+  }
 
   location = /index.html {
     expires -1;
   }
 
+  # An add_header in a location replaces the inherited ones, so the headers
+  # above are repeated for asset responses.
   location ^~ /assets/ {
     add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "no-referrer" always;
+    add_header X-Robots-Tag "${ROBOTS}" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Cache-Control "public, max-age=31536000, immutable" always;
   }
 

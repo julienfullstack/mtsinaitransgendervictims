@@ -1,5 +1,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
+import helmet from '@fastify/helmet'
+import rateLimit from '@fastify/rate-limit'
 import { z } from 'zod'
 import type { AppConfig } from './config.js'
 import { createPool, type DbClient } from './db.js'
@@ -18,7 +20,22 @@ const querySchema = z.object({
 })
 
 export function buildServer(config: AppConfig, db: DbClient = createPool(config)) {
-  const app = Fastify({ logger: true })
+  const app = Fastify({
+    logger: true,
+    trustProxy: true,
+    // The API answers JSON only, so cap request size and URL length.
+    bodyLimit: 16 * 1024,
+    maxParamLength: 200,
+  })
+
+  // The API serves no HTML, so the strict defaults cost nothing.
+  app.register(helmet, {
+    contentSecurityPolicy: { directives: { 'default-src': ["'none'"], 'frame-ancestors': ["'none'"] } },
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    hsts: { maxAge: 31_536_000, includeSubDomains: true },
+  })
+
+  app.register(rateLimit, { max: 120, timeWindow: '1 minute' })
 
   app.register(cors, {
     origin: config.corsOrigins.length ? config.corsOrigins : false,
