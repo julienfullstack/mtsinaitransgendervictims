@@ -1,6 +1,7 @@
 import type { Email, MedicalRecord, Report } from './types'
 
-const BASE = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001').replace(/\/$/, '')
+/** Empty by default: the site calls /api on its own origin, proxied to the API. */
+const BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
 
 async function get<T>(path: string, params: Record<string, string | undefined>): Promise<T> {
   const search = new URLSearchParams()
