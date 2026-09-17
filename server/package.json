@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "migrate:dev": "tsx src/migrate.ts",
-    "import": "tsx src/import.ts",
+    "import": "sh -c 'if [ -f dist/import.js ]; then node --enable-source-maps dist/import.js \"$@\"; else tsx src/import.ts \"$@\"; fi' --",
     "build": "tsc -p tsconfig.json",
     "start": "node --enable-source-maps dist/index.js",
     "migrate": "node --enable-source-maps dist/migrate.js"
