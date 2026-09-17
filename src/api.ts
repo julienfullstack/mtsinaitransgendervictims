@@ -1,7 +1,17 @@
 import type { Email, MedicalRecord, Report } from './types'
 
-/** Empty by default: the site calls /api on its own origin, proxied to the API. */
-const BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
+declare global {
+  interface Window {
+    __API_BASE__?: string
+  }
+}
+
+/**
+ * The API base URL comes from /config.js, which nginx writes at container
+ * start. Empty means the API is on this origin, which is how the dev server
+ * runs it through the Vite proxy.
+ */
+const BASE = (window.__API_BASE__ || import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
 
 async function get<T>(path: string, params: Record<string, string | undefined>): Promise<T> {
   const search = new URLSearchParams()
