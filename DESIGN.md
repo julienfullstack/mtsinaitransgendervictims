@@ -18,6 +18,8 @@
 - Split like cruush, with a separate frontend, API and database. Source: Julien, 2026-09-17: "So new project in coolify we should split front and backend the database will be extensive", "One repo build to cruush in terms split postsqel api and dataset", "Database rathwe".
 - API: Fastify with pg and zod in `server/`, numbered SQL migrations in `server/sql/`, mirroring cruush's server layout. Keyword search runs in Postgres with `tsvector` columns and GIN indexes; the earlier browser-side MiniSearch index was removed because the database will be large.
 - Deployment target: a new Coolify project (never an existing one) on the Hetzner server, with the frontend, API and Postgres as separate resources, on mtsinaitransgendervictims.com. Source: Julien, 2026-09-17: "Domain MtSinaiTransgenderVictims.com", "pla do not put on existing projexts".
+- Coolify project `mtsinaitransgendervictims` (uuid lg7rhdf5kq10p1766ppw8p4m) on server cruush-prod-1 holds three resources: `mtstv-frontend` (ag3g2vfiovqk8ykhacwn357v), `mtstv-api` (rbghfbjyl6l8x8cbeujduv4s) and `mtstv-postgres` (p1mqqg79h99cuisaj7m6xhjk). The repo is pulled with a read-only GitHub deploy key.
+- The frontend image carries no API URL. nginx serves `/config.js` with `API_BASE_URL` substituted at container start, and the page reads `window.__API_BASE__`. Container-to-container DNS was not used because Coolify names each container `<uuid>-<timestamp>`, which changes on every deploy, and a `--network-alias` run option was not applied.
 
 ## Publication gate
 - Every database row has a `published` flag and the API serves only published rows, so raw scraped material stays private until reviewed. Staff names are served only when marked publishable.
