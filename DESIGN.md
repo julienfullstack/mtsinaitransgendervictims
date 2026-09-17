@@ -7,6 +7,7 @@
 - The parody disclaimer appears in the header utility line and the footer.
 
 ## Structure
+- Pages: "The Department of Sludge" added (Julien, 2026-09-17: "also gotta a oage for The Department of Sludge"); contents pending Julien.
 - Two sides: "My Story" and a filterable, searchable "Wall of Shame". Source: Julien, 2026-09-17.
 - Emails and records are keyword searchable. There is an emails-only view and a combined view placing medical records against emails on one timeline. Source: Julien, 2026-09-17.
 - Every item carries an evidence kind: patient allegation, documentary evidence, hospital response, or verifiable fact. Reports are filterable by hospital, department, and staff member; staff names appear only when marked publishable. Response tracking records complaint submitted, acknowledged, first response, and whether corrective action was communicated. Source: Julien's pasted email, 2026-09-17.

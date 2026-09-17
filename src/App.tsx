@@ -3,12 +3,14 @@ import { MyStory } from './views/MyStory'
 import { WallOfShame } from './views/WallOfShame'
 import { Emails } from './views/Emails'
 import { RecordsVsEmails } from './views/RecordsVsEmails'
+import { DepartmentOfSludge } from './views/DepartmentOfSludge'
 
 const ROUTES = [
   { path: 'my-story', label: 'My Story', view: MyStory },
   { path: 'wall-of-shame', label: 'Wall of Shame', view: WallOfShame },
   { path: 'emails', label: 'Emails', view: Emails },
   { path: 'records-vs-emails', label: 'Records vs Emails', view: RecordsVsEmails },
+  { path: 'department-of-sludge', label: 'The Department of Sludge', view: DepartmentOfSludge },
 ] as const
 
 const ICONS: Record<string, React.ReactNode> = {
@@ -20,6 +22,9 @@ const ICONS: Record<string, React.ReactNode> = {
   ),
   'records-vs-emails': (
     <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="6" width="16" height="36" rx="1" fill="none" stroke="currentColor" strokeWidth="3" /><rect x="26" y="6" width="16" height="36" rx="1" fill="none" stroke="currentColor" strokeWidth="3" /><path d="M10 14h8M10 20h8M10 26h8M30 14h8M30 20h8M30 26h8" stroke="currentColor" strokeWidth="2.5" /></svg>
+  ),
+  'department-of-sludge': (
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 8h36L28 26v14l-8-4V26Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" /></svg>
   ),
 }
 
