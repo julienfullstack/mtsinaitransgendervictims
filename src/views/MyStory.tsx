@@ -21,7 +21,7 @@ export function MyStory() {
     <section className="page">
       {story.trim() ? (
         <div className="story">
-          {story.split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)}
+          {story.split(/\n+/).filter((p) => p.trim()).map((p, i) => <p key={i}>{p}</p>)}
         </div>
       ) : (
         <p className="empty">Story not added yet.</p>

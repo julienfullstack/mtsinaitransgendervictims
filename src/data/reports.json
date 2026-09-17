@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "id": "owner-misgendered-after-surgery",
+    "hospital": "Mount Sinai",
+    "categories": ["misgendering", "inadequate_complaint_response"],
+    "kind": "allegation",
+    "title": "Misgendered immediately after gender-affirming surgery",
+    "summary": "\"I have repeatedly reported that I was misgendered immediately after gender-affirming surgery.\" The site owner asks what investigation, if any, Mount Sinai has conducted into this complaint.",
+    "submittedBy": "site_owner"
+  },
+  {
+    "id": "owner-clitoral-burial-consent",
+    "hospital": "Mount Sinai",
+    "categories": ["informed_consent", "surgical_outcome"],
+    "kind": "allegation",
+    "title": "Consented to \"clitoral burial,\" not a \"partial\" or \"incomplete\" burial",
+    "summary": "\"I consented to a procedure described on my consent documentation as 'clitoral burial.' I did not understand myself to be consenting to what has subsequently been described as a 'partial' or 'incomplete' burial.\" The site owner disputes the surgeon's account of the preoperative discussion and asks for any literature, patient-education materials, diagrams, consent materials, or operative protocols showing otherwise.",
+    "submittedBy": "site_owner"
+  },
+  {
+    "id": "owner-no-substantive-response",
+    "hospital": "Mount Sinai",
+    "categories": ["inadequate_complaint_response", "patient_advocacy_failure"],
+    "kind": "allegation",
+    "title": "Repeated, detailed complaints without a substantive response",
+    "summary": "\"Why have my repeated and detailed complaints not received a substantive response addressing the allegations I have raised?\"",
+    "submittedBy": "site_owner"
+  },
+  {
+    "id": "owner-records-requested",
+    "hospital": "Mount Sinai",
+    "categories": ["records_access"],
+    "kind": "allegation",
+    "title": "Complete records requested, due Monday, September 21",
+    "summary": "\"I want my records in full by Monday, September 21. If they have not been provided by the time the first version of the website launches, I will accurately document that they had not been provided as of that date.\"",
+    "submittedBy": "site_owner"
+  }
+]

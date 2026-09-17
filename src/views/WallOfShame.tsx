@@ -76,11 +76,12 @@ export function WallOfShame() {
               </div>
               <p><Highlight text={r.summary} query={query} /></p>
               <dl className="response">
-                <dt>Complaint submitted</dt><dd>{formatDate(r.complaintSubmitted)}</dd>
-                <dt>Acknowledged</dt><dd>{r.acknowledged ? formatDate(r.acknowledged) : 'No'}</dd>
-                <dt>First response</dt><dd>{r.firstResponse ? `${formatDate(r.firstResponse)}${wait !== null ? ` (${wait} days)` : ''}` : 'None'}</dd>
-                <dt>Corrective action communicated</dt><dd>{r.correctiveActionCommunicated ? 'Yes' : 'No'}</dd>
+                <dt>Complaint submitted</dt><dd>{r.complaintSubmitted ? formatDate(r.complaintSubmitted) : 'Not recorded'}</dd>
+                <dt>Acknowledged</dt><dd>{r.acknowledged ? formatDate(r.acknowledged) : 'Not recorded'}</dd>
+                <dt>First response</dt><dd>{r.firstResponse ? `${formatDate(r.firstResponse)}${wait !== null ? ` (${wait} days)` : ''}` : 'Not recorded'}</dd>
+                <dt>Corrective action communicated</dt><dd>{r.correctiveActionCommunicated === undefined ? 'Not recorded' : r.correctiveActionCommunicated ? 'Yes' : 'No'}</dd>
               </dl>
+              {!r.hospitalStatement && <p className="meta">No hospital statement on record.</p>}
               {r.hospitalStatement && (
                 <blockquote className="statement">
                   <KindBadge kind="hospital_response" label="Hospital statement" />
