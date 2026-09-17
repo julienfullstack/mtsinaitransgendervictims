@@ -14,7 +14,13 @@
 - Every item carries an evidence kind: patient allegation, documentary evidence, hospital response, or verifiable fact. Reports are filterable by hospital, department, and staff member; staff names appear only when marked publishable. Response tracking records complaint submitted, acknowledged, first response, and whether corrective action was communicated. Source: Julien's pasted email, 2026-09-17.
 
 ## Stack
-- TypeScript, React, Vite, MiniSearch. Source: Julien, 2026-09-17: "type script react mini".
+- TypeScript, React, Vite for the frontend. Source: Julien, 2026-09-17: "type script react mini".
+- Split like cruush, with a separate frontend, API and database. Source: Julien, 2026-09-17: "So new project in coolify we should split front and backend the database will be extensive", "One repo build to cruush in terms split postsqel api and dataset", "Database rathwe".
+- API: Fastify with pg and zod in `server/`, numbered SQL migrations in `server/sql/`, mirroring cruush's server layout. Keyword search runs in Postgres with `tsvector` columns and GIN indexes; the earlier browser-side MiniSearch index was removed because the database will be large.
+- Deployment target: a new Coolify project (never an existing one) on the Hetzner server, with the frontend, API and Postgres as separate resources, on mtsinaitransgendervictims.com. Source: Julien, 2026-09-17: "Domain MtSinaiTransgenderVictims.com", "pla do not put on existing projexts".
+
+## Publication gate
+- Every database row has a `published` flag and the API serves only published rows, so raw scraped material stays private until reviewed. Staff names are served only when marked publishable.
 
 ## Copy
 - Page body copy, including `content/my-story.md`, is written by Julien.

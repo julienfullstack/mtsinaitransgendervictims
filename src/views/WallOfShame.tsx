@@ -1,10 +1,8 @@
-import { useMemo, useState } from 'react'
-import { daysBetween, formatDate, reports, searchReports } from '../data'
+import { useState } from 'react'
+import { daysBetween, fetchFilters, fetchReports, formatDate } from '../api'
+import { useDebounced, useLoad } from '../useApi'
 import { CATEGORY_LABELS, EVIDENCE_KIND_LABELS, type EvidenceKind, type ReportCategory } from '../types'
 import { Highlight, KindBadge, SearchBox } from '../components/Highlight'
-
-const unique = (values: (string | undefined)[]) =>
-  [...new Set(values.filter((v): v is string => !!v))].sort()
 
 export function WallOfShame() {
   const [query, setQuery] = useState('')
@@ -13,23 +11,23 @@ export function WallOfShame() {
   const [staff, setStaff] = useState('')
   const [category, setCategory] = useState<ReportCategory | ''>('')
   const [kind, setKind] = useState<EvidenceKind | ''>('')
+  const search = useDebounced(query)
 
-  const hospitals = unique(reports.map((r) => r.hospital))
-  const departments = unique(reports.map((r) => r.department))
-  const staffNames = unique(reports.flatMap((r) => (r.staff ?? []).filter((s) => s.publishable).map((s) => s.name)))
-
-  const visible = useMemo(() => {
-    const hits = searchReports(query)
-    return reports.filter(
-      (r) =>
-        (!hits || hits.has(r.id)) &&
-        (!hospital || r.hospital === hospital) &&
-        (!department || r.department === department) &&
-        (!staff || r.staff?.some((s) => s.publishable && s.name === staff)) &&
-        (!category || r.categories.includes(category)) &&
-        (!kind || r.kind === kind),
-    )
-  }, [query, hospital, department, staff, category, kind])
+  const filters = useLoad(() => fetchFilters(), [])
+  const { data, loading, error } = useLoad(
+    () =>
+      fetchReports({
+        q: search,
+        hospital: hospital || undefined,
+        department: department || undefined,
+        staff: staff || undefined,
+        category: category || undefined,
+        kind: kind || undefined,
+      }),
+    [search, hospital, department, staff, category, kind],
+  )
+  const reports = data ?? []
+  const options = filters.data
 
   return (
     <section className="page">
@@ -37,44 +35,47 @@ export function WallOfShame() {
         <SearchBox value={query} onChange={setQuery} label="Search reports" />
         <select value={hospital} onChange={(e) => setHospital(e.target.value)}>
           <option value="">All hospitals</option>
-          {hospitals.map((h) => <option key={h}>{h}</option>)}
+          {(options?.hospitals ?? []).map((h) => <option key={h}>{h}</option>)}
         </select>
         <select value={department} onChange={(e) => setDepartment(e.target.value)}>
           <option value="">All departments</option>
-          {departments.map((d) => <option key={d}>{d}</option>)}
+          {(options?.departments ?? []).map((d) => <option key={d}>{d}</option>)}
         </select>
         <select value={staff} onChange={(e) => setStaff(e.target.value)}>
           <option value="">All staff</option>
-          {staffNames.map((s) => <option key={s}>{s}</option>)}
+          {(options?.staff ?? []).map((s) => <option key={s}>{s}</option>)}
         </select>
         <select value={category} onChange={(e) => setCategory(e.target.value as ReportCategory | '')}>
           <option value="">All categories</option>
-          {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          {(options?.categories ?? Object.keys(CATEGORY_LABELS)).map((c) => (
+            <option key={c} value={c}>{CATEGORY_LABELS[c as ReportCategory] ?? c}</option>
+          ))}
         </select>
         <select value={kind} onChange={(e) => setKind(e.target.value as EvidenceKind | '')}>
           <option value="">All evidence types</option>
           {Object.entries(EVIDENCE_KIND_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </select>
-        <span className="count">{visible.length} of {reports.length}</span>
+        <span className="count">{loading ? 'Loading…' : `${reports.length} reports`}</span>
       </div>
-      {reports.length === 0 && <p className="empty">No reports published yet.</p>}
+      {error && <p className="empty">Could not load reports: {error}</p>}
+      {!error && !loading && reports.length === 0 && <p className="empty">No reports published yet.</p>}
       <ul className="grid">
-        {visible.map((r) => {
+        {reports.map((r) => {
           const wait = daysBetween(r.complaintSubmitted, r.firstResponse)
           return (
             <li key={r.id} className="card report">
               <header>
                 <KindBadge kind={r.kind} label={EVIDENCE_KIND_LABELS[r.kind]} />
-                <strong><Highlight text={r.title} query={query} /></strong>
+                <strong><Highlight text={r.title} query={search} /></strong>
               </header>
               <div className="meta">
                 {[r.hospital, r.department].filter(Boolean).join(' · ')}
                 {r.staff?.filter((s) => s.publishable).map((s) => ` · ${s.name}${s.role ? ` (${s.role})` : ''}`)}
               </div>
               <div className="tags">
-                {r.categories.map((c) => <span key={c} className="tag">{CATEGORY_LABELS[c]}</span>)}
+                {r.categories.map((c) => <span key={c} className="tag">{CATEGORY_LABELS[c] ?? c}</span>)}
               </div>
-              <p><Highlight text={r.summary} query={query} /></p>
+              <p><Highlight text={r.summary} query={search} /></p>
               <dl className="response">
                 <dt>Complaint submitted</dt><dd>{r.complaintSubmitted ? formatDate(r.complaintSubmitted) : 'Not recorded'}</dd>
                 <dt>Acknowledged</dt><dd>{r.acknowledged ? formatDate(r.acknowledged) : 'Not recorded'}</dd>
@@ -85,7 +86,7 @@ export function WallOfShame() {
               {r.hospitalStatement && (
                 <blockquote className="statement">
                   <KindBadge kind="hospital_response" label="Hospital statement" />
-                  <Highlight text={r.hospitalStatement} query={query} />
+                  <Highlight text={r.hospitalStatement} query={search} />
                 </blockquote>
               )}
             </li>
