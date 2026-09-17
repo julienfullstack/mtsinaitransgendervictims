@@ -17,7 +17,6 @@ export function Emails() {
 
   return (
     <section className="page">
-      <h1>Emails</h1>
       <div className="toolbar">
         <SearchBox value={query} onChange={setQuery} label="Search emails" />
         <select value={direction} onChange={(e) => setDirection(e.target.value as typeof direction)}>

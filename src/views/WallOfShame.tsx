@@ -33,7 +33,6 @@ export function WallOfShame() {
 
   return (
     <section className="page">
-      <h1>Wall of Shame</h1>
       <div className="toolbar">
         <SearchBox value={query} onChange={setQuery} label="Search reports" />
         <select value={hospital} onChange={(e) => setHospital(e.target.value)}>

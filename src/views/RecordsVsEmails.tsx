@@ -34,7 +34,6 @@ export function RecordsVsEmails() {
 
   return (
     <section className="page">
-      <h1>Records vs Emails</h1>
       <div className="toolbar">
         <SearchBox value={query} onChange={setQuery} label="Search records and emails" />
         {focus && <button className="chip" onClick={() => setFocus(null)}>Show all</button>}

@@ -19,7 +19,6 @@ export function MyStory() {
 
   return (
     <section className="page">
-      <h1>My Story</h1>
       {story.trim() ? (
         <div className="story">
           {story.split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)}
