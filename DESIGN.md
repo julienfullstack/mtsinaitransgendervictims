@@ -21,6 +21,13 @@
 - Coolify project `mtsinaitransgendervictims` (uuid lg7rhdf5kq10p1766ppw8p4m) on server cruush-prod-1 holds three resources: `mtstv-frontend` (ag3g2vfiovqk8ykhacwn357v), `mtstv-api` (rbghfbjyl6l8x8cbeujduv4s) and `mtstv-postgres` (p1mqqg79h99cuisaj7m6xhjk). The repo is pulled with a read-only GitHub deploy key.
 - The frontend image carries no API URL. nginx serves `/config.js` with `API_BASE_URL` substituted at container start, and the page reads `window.__API_BASE__`. Container-to-container DNS was not used because Coolify names each container `<uuid>-<timestamp>`, which changes on every deploy, and a `--network-alias` run option was not applied.
 
+## Security
+- Search indexing is blocked until launch: `robots.txt` disallows everything, the page carries a robots meta tag, and nginx sends `X-Robots-Tag` from the `ROBOTS` variable. Set `ROBOTS` to "index, follow" and change those two places at launch. Source: Julien, 2026-09-17: "Fix the issues make the page secure".
+- The site sends CSP (`connect-src` includes the API origin from `CSP_CONNECT`), HSTS, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer` and `Permissions-Policy`. The API sends helmet headers, limits requests to 120 per minute per address, caps body and parameter size, and allows only the origins in `CORS_ORIGINS`.
+- Postgres publishes no ports; it is reachable only on the server's internal Docker network.
+- HTTPS waits for mtsinaitransgendervictims.com. Let's Encrypt did not issue a certificate for the temporary `sslip.io` host, so the temporary URLs stay on http.
+- The database password was rotated on 2026-09-17 after it was printed into an agent session. Coolify's own stored copy could not be updated through its API (`Server Error`), so the password in the Coolify database view is stale while the API's `DATABASE_URL` holds the current one.
+
 ## Publication gate
 - Every database row has a `published` flag and the API serves only published rows, so raw scraped material stays private until reviewed. Staff names are served only when marked publishable.
 
